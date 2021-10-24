@@ -1,3 +1,0 @@
-E:/OneDrive/LEEDSSTUDY/graphic/A1/source/cmake-build-debug/CMakeFiles/edit_cache.dir
-E:/OneDrive/LEEDSSTUDY/graphic/A1/source/cmake-build-debug/CMakeFiles/source.dir
-E:/OneDrive/LEEDSSTUDY/graphic/A1/source/cmake-build-debug/CMakeFiles/rebuild_cache.dir
