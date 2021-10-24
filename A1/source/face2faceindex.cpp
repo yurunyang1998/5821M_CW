@@ -4,13 +4,8 @@
 #include <unordered_map>
 #include <array>
 #include <string>
-
+#include "commonUtilis.h"
 using namespace std;
-int appendHeader(ofstream * outputFile, string header){
-
-    *outputFile<<header<<endl;
-
-}
 
 
 vector<array<int,3>> vextex2IndexandFace(vector<string> &vextexs,vector<string> &vextexIndex){

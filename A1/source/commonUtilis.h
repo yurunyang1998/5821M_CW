@@ -32,4 +32,9 @@ vector<string> strsplit(const string& str, const string& delim) {
     return res;
 }
 
+int appendHeader(ofstream * outputFile, string header){
+    *outputFile<<header<<endl;
+}
+
+
 #endif

@@ -61,29 +61,29 @@ vector<int> findOtherHalfEdge(vector<halfEdge> &halfEdgesIndex){
         if(foundHalfEdge==false)
             otherHalfEdges.push_back(-1);
     }
-
     return otherHalfEdges;
-
-
 }
 
 
 
 
-int main(){
+int main(int argc, char ** argv){
 
     ofstream *outputFile = new ofstream("./output.diredge");
     ifstream *inputFile = new ifstream("./test.face");
 
     char lineBuf[100];
     vector<Vextex> vextexIndex;
+    vector<string> vextexsBuffer;
     vector<halfEdge> halfEdgeIndex;
     vector<vector<int>> faceIndex;
+    vector<string> facesBuffer;
     while(inputFile->getline(lineBuf,100)){ // enumunate vextexs and faces
         if(lineBuf[0] == 'V')
         {
 //            cout<<lineBuf<<endl;
             string str(lineBuf);  //convert char [] type to string
+            vextexsBuffer.push_back(str);
             vector<string> result = strsplit(str," ");
             float x = atof(result[2].c_str()); //convert string to float
             float y = atof(result[3].c_str());
@@ -96,6 +96,7 @@ int main(){
         else if(lineBuf[0]=='F'){
 //            cout<<lineBuf<<endl;
             string str(lineBuf);
+            facesBuffer.push_back(str);
             vector<string> result = strsplit(str," ");
             int x = atoi(result[2].c_str()); //convert string to float
             int y = atoi(result[3].c_str());
@@ -112,15 +113,32 @@ int main(){
 
     face2halfEdges(faceIndex, &halfEdgeIndex);
 
-    auto FDE = halfEdge2FistDirectedEdge(halfEdgeIndex, vextexIndex.size());
-    auto otherHalfEdge = findOtherHalfEdge(halfEdgeIndex);
+    vector<int> FDE = halfEdge2FistDirectedEdge(halfEdgeIndex, vextexIndex.size());
+    vector<int> otherHalfEdge = findOtherHalfEdge(halfEdgeIndex);
+
+    string  header = "# University of Leeds 2020-2021\n"
+                                    "# COMP 5812M Assignment 1\n"
+                                    "# runyang yu\n"
+                                    "# 201480588\n"
+                                    "#\n"
+                                    "# Object Name: Cube\n"
+                                    "# Vertices="+to_string(vextexsBuffer.size())+"Faces=" +to_string(facesBuffer.size())+" \n#\n";
+
+    appendHeader(outputFile, header);
+    for(string vextex: vextexsBuffer){
+        *outputFile<<vextex<<"\n";
+    }
+    for(int i=0;i<FDE.size();i++){
+        *outputFile<<"FirstDirectedEdge "<<i<<" "<<FDE[i]<<'\n';
+    }
+    for(string face:facesBuffer){
+        *outputFile<<face<<'\n';
+    }
     for(int i=0;i<otherHalfEdge.size();i++){
-        cout<<i<<" "<<otherHalfEdge[i]<<endl;
+        *outputFile<<"OtherHalf "<<i<<" "<<otherHalfEdge[i]<<'\n';
     }
 
-
-
-
-
+    outputFile->close();
+    inputFile->close();
 
 }
