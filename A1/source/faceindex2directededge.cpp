@@ -25,7 +25,7 @@ int face2halfEdges(vector<vector<int>> &faces, vector<halfEdge> * halfEdgesIndex
     return 0;
 }
 
-int halfEdge2FistDirectedEdge(vector<halfEdge> &halfEdges, int vextexNum){
+vector<int> halfEdge2FistDirectedEdge(vector<halfEdge> &halfEdges, int vextexNum){
     vector<int> FirstDirectedEdges;
     for(int i=0;i<vextexNum;i++){
         for(int j=0;j<halfEdges.size();j++){
@@ -35,12 +35,38 @@ int halfEdge2FistDirectedEdge(vector<halfEdge> &halfEdges, int vextexNum){
             }
         }
     }
-    for(int i:FirstDirectedEdges){
-        cout<<i<<endl;
-    }
+
+    return FirstDirectedEdges;
 
 
 }
+
+
+vector<int> findOtherHalfEdge(vector<halfEdge> &halfEdgesIndex){
+    vector<int> otherHalfEdges;
+    for(int i=0;i<halfEdgesIndex.size();i++){
+
+        int start = halfEdgesIndex[i].startvextex();
+        int end = halfEdgesIndex[i].endvextex();
+
+        for(int j=0;j<halfEdgesIndex.size();j++){
+            if(halfEdgesIndex[j].endvextex()==start && halfEdgesIndex[j].startvextex()== end){
+                cout<<i<<":"<<halfEdgesIndex[i].startvextex()<<" "<<halfEdgesIndex[i].endvextex()<<"  ";
+                cout<<j<<":"<<halfEdgesIndex[j].startvextex()<<" "<<halfEdgesIndex[j].endvextex()<<endl;
+                break;
+
+            }
+        }
+
+
+
+
+    }
+
+
+
+}
+
 
 
 
@@ -86,7 +112,13 @@ int main(){
 
     face2halfEdges(faceIndex, &halfEdgeIndex);
 
-    halfEdge2FistDirectedEdge(halfEdgeIndex, vextexIndex.size());
+    auto FDE = halfEdge2FistDirectedEdge(halfEdgeIndex, vextexIndex.size());
+
+    findOtherHalfEdge(halfEdgeIndex);
+
+
+
+
 
 
 }
