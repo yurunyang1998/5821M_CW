@@ -70,7 +70,7 @@ int main() {
         *outputFile<<"Vertex "<<i<<" "<<vertexsIndex[i]<<endl;
     }
     for(int i=0;i<faces.size();i++){
-        *outputFile<<"Face "<<i<<" "<<faces[i][0]<<" "<<faces[i][1]<<faces[i][2]<<endl;
+        *outputFile<<"Face "<<i<<" "<<faces[i][0]<<" "<<faces[i][1]<<" "<<faces[i][2]<<endl;
     }
     outputFile->close();
 }

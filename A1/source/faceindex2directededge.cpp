@@ -48,21 +48,21 @@ vector<int> findOtherHalfEdge(vector<halfEdge> &halfEdgesIndex){
 
         int start = halfEdgesIndex[i].startvextex();
         int end = halfEdgesIndex[i].endvextex();
-
+        bool foundHalfEdge = false;
         for(int j=0;j<halfEdgesIndex.size();j++){
             if(halfEdgesIndex[j].endvextex()==start && halfEdgesIndex[j].startvextex()== end){
-                cout<<i<<":"<<halfEdgesIndex[i].startvextex()<<" "<<halfEdgesIndex[i].endvextex()<<"  ";
-                cout<<j<<":"<<halfEdgesIndex[j].startvextex()<<" "<<halfEdgesIndex[j].endvextex()<<endl;
+                otherHalfEdges.push_back(j);
+                foundHalfEdge = true;
+//                cout<<i<<":"<<halfEdgesIndex[i].startvextex()<<" "<<halfEdgesIndex[i].endvextex()<<"  ";
+//                cout<<j<<":"<<halfEdgesIndex[j].startvextex()<<" "<<halfEdgesIndex[j].endvextex()<<endl;
                 break;
-
             }
         }
-
-
-
-
+        if(foundHalfEdge==false)
+            otherHalfEdges.push_back(-1);
     }
 
+    return otherHalfEdges;
 
 
 }
@@ -113,8 +113,10 @@ int main(){
     face2halfEdges(faceIndex, &halfEdgeIndex);
 
     auto FDE = halfEdge2FistDirectedEdge(halfEdgeIndex, vextexIndex.size());
-
-    findOtherHalfEdge(halfEdgeIndex);
+    auto otherHalfEdge = findOtherHalfEdge(halfEdgeIndex);
+    for(int i=0;i<otherHalfEdge.size();i++){
+        cout<<i<<" "<<otherHalfEdge[i]<<endl;
+    }
 
 
 
