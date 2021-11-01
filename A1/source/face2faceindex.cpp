@@ -36,8 +36,18 @@ vector<array<int,3>> vextex2IndexandFace(vector<string> &vextexs,vector<string> 
 
 int main() {
 
-    ofstream *outputFile = new ofstream("./test.face");
-    ifstream *inputFile = new ifstream("./747.tri");
+
+    string inputFileName = _argv[1];
+    ifstream *inputFile = new ifstream(inputFileName);
+    if(!inputFile->is_open()){
+        cout<<"File not existed"<<endl;
+        return 0;
+    }
+    string outputFileName = inputFileName.substr(0,inputFileName.find_last_of('.'));
+    cout<<outputFileName<<endl;
+    ofstream *outputFile = new ofstream(outputFileName+".face");
+
+
     char faceNumBuf[5];
     inputFile->getline(faceNumBuf,10);
     int faceNum = atoi(faceNumBuf);
@@ -58,7 +68,7 @@ int main() {
                     "# 201480588\n"
                     "#\n"
                     "# Object Name: Cube\n"
-                    "# Vertices="+to_string(verticesNum)+"Faces=" +to_string(facesNum)+" \n#\n";
+                    "# Vertices="+to_string(verticesNum)+"Faces=" +to_string(facesNum)+" \n#";
 
     appendHeader(outputFile, header);
     for(int i=0;i<vertexsIndex.size();i++){

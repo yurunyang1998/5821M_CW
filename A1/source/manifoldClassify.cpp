@@ -15,15 +15,18 @@ bool judgeSharedEdge(vector<string> &otherHalfEdges){
     for(string halfEdge : otherHalfEdges){
         auto edgeData = strsplit(halfEdge," ");
         if(edgeData[2]=="-1"){
+            cout<<"halfEdge "<<edgeData[1]<<" has no otherhalf. FAILED"<<endl;
             return false;
         }else{
             if(existedMap[atoi(edgeData[2].c_str())]==1){
+                cout<<"halfedge "<<edgeData[1]<<" has more than one otherhalfEdge. FAILED"<<endl;
                 return false;
             }else{
                 existedMap[atoi(edgeData[2].c_str())]=1;
             }
         }
     }
+    cout<<"PASSED edge test"<<endl;
     return true;
 
 }
@@ -81,15 +84,11 @@ bool judgeSinglePoint(string vertexStr, list<string> facesWitheVertex){
             if(breakFlag)
                 break;
         }
-//        break;
     }
     if(facesWitheVertex.size()!=0){
         return false;
     }
     return true;
-
-
-
 
 }
 
@@ -107,14 +106,28 @@ bool judgePinchPoints(int vertexNum, vector<string> faces){
         bool result = judgeSinglePoint(vertexStr, facesWitheVertex);
         facesWitheVertex.clear();
         if(result == false){
+            cout<<"vertex: "<<i<<" failed"<<endl;
             return false;
         }
-        cout<<"point "<<i<<" pass"<<endl;
+        cout<<"vertex "<<i<<" pass"<<endl;
     }
 
     return true;
 
 }
+
+int calculateGenus(vector<string> &vertexs, vector<string> &halfEdges, vector<string> &faces ){
+    int vertexsNum = vertexs.size();
+    int edgeNum = halfEdges.size()/2;
+    int facesNum = faces.size();
+
+    int genus = 1-(vertexsNum-edgeNum+facesNum)/2;
+    return genus;
+
+
+}
+
+
 
 int main(){
 
@@ -137,10 +150,17 @@ int main(){
         }
     }
 
-//    cout<<judgeSharedEdge(otherHalfEdges)<<endl;
-    bool result = judgePinchPoints(vertexs.size(), faces);
+    bool result = judgeSharedEdge(otherHalfEdges);
     if(result)
-        cout<<"true"<<endl;
+        result = judgePinchPoints(vertexs.size(), faces);
+
+    if(result)
+        cout<<"Manifold test PASSED"<<endl;
     else
-        cout<<"false"<<endl;
+        cout<<"Manifold test FAILED"<<endl;
+
+    int genus = calculateGenus(vertexs, otherHalfEdges, faces);
+    cout<<genus<<endl;
+
+
 }
