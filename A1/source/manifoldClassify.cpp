@@ -34,22 +34,42 @@ bool judgeSinglePoint(string vertexStr, list<string> facesWitheVertex){
     string start,end;
     for(int i=2;i<5;i++){
         if(faceData[i] == vertexStr){
-            start = faceData[(i+1)%5];
-            end = faceData[(i+2)%5];
+            if(i==2){
+                start = faceData[3];
+                end = faceData[4];
+            }else if(i==3){
+                start = faceData[4];
+                end = faceData[2];
+            }else if(i==4){
+                start = faceData[2];
+                end = faceData[3];
+            }
         }
+
     }
     facesWitheVertex.pop_front();
     string anotherVertex = "";
-    do{
+    auto iter=facesWitheVertex.begin();
+    while(end!=start && iter!=facesWitheVertex.end()){
         bool breakFlag = false;
-        for(auto iter=facesWitheVertex.begin();iter!=facesWitheVertex.end();iter++){
+        for(iter=facesWitheVertex.begin();iter!=facesWitheVertex.end();iter++){
             auto faceData = strsplit(*iter, " ");
             for(int i=2;i<5;i++){
                 if(faceData[i]==end){
-                    string anotherPoint1 = faceData[(i+1)%5];
-                    string anotherPoint2 = faceData[(i+2)%5];
+                    string anotherPoint1;// = faceData[(i+1)%5];
+                    string anotherPoint2;// = faceData[(i+2)%5];
+                    if(i==2){
+                        anotherPoint1 = faceData[3];
+                        anotherPoint2 = faceData[4];
+                    }else if(i==3){
+                        anotherPoint1 = faceData[4];
+                        anotherPoint2 = faceData[2];
+                    }else if(i==4){
+                        anotherPoint1 = faceData[2];
+                        anotherPoint2 = faceData[3];
+                    }
+
                     end = (anotherPoint1==vertexStr?anotherPoint2:anotherPoint1);
-                    anotherVertex = (anotherPoint1==vertexStr?anotherPoint1:anotherPoint2);
                     facesWitheVertex.erase(iter);
 
                     cout<<end<<"->";
@@ -61,7 +81,8 @@ bool judgeSinglePoint(string vertexStr, list<string> facesWitheVertex){
             if(breakFlag)
                 break;
         }
-    }while(anotherVertex!=start);
+//        break;
+    }
     if(facesWitheVertex.size()!=0){
         return false;
     }
@@ -84,10 +105,11 @@ bool judgePinchPoints(int vertexNum, vector<string> faces){
             }
         }
         bool result = judgeSinglePoint(vertexStr, facesWitheVertex);
+        facesWitheVertex.clear();
         if(result == false){
             return false;
         }
-
+        cout<<"point "<<i<<" pass"<<endl;
     }
 
     return true;
@@ -116,6 +138,9 @@ int main(){
     }
 
 //    cout<<judgeSharedEdge(otherHalfEdges)<<endl;
-    cout<<judgePinchPoints(vertexs.size(), faces)<<endl;
-
+    bool result = judgePinchPoints(vertexs.size(), faces);
+    if(result)
+        cout<<"true"<<endl;
+    else
+        cout<<"false"<<endl;
 }

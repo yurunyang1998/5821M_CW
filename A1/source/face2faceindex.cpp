@@ -37,15 +37,15 @@ vector<array<int,3>> vextex2IndexandFace(vector<string> &vextexs,vector<string> 
 int main() {
 
     ofstream *outputFile = new ofstream("./test.face");
-    ifstream *inputFile = new ifstream("E:\\OneDrive\\LEEDSSTUDY\\graphic\\A1\\models\\triangles\\2torus.tri");
+    ifstream *inputFile = new ifstream("./747.tri");
     char faceNumBuf[5];
     inputFile->getline(faceNumBuf,10);
     int faceNum = atoi(faceNumBuf);
     vector<string> vertexs;
     vector<string> vertexsIndex;
-    char vertexBuf[20];
+    char vertexBuf[100];
     for(int i=0;i<faceNum*3;i++){
-        inputFile->getline(vertexBuf,20);
+        inputFile->getline(vertexBuf,100);
         vertexs.push_back(string(vertexBuf));
     }
 
