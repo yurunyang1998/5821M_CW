@@ -7,28 +7,28 @@
 #include "commonUtilis.h"
 using namespace std;
 
-
-vector<array<int,3>> vextex2IndexandFace(vector<string> &vextexs,vector<string> &vextexIndex){
-    unordered_map<string, int> vextexMap;
+//This function is used to de-duplication of vertexs and convert it into index. and combine every three vertexs to a face.
+vector<array<int,3>> vertex2IndexandFace(vector<string> &vertexs,vector<string> &vertexIndex){
+    unordered_map<string, int> vertexMap; // this map is to find if this vertex has appeared before.
     vector<array<int,3>> facesIndex;
     int i=0;
-    while(i<vextexs.size()){
+    while(i<vertexs.size()){  //iterate the whole vertesx vector
         array<int,3> face;
         int pointIndex = 0;
         for(int j=0;j<3;j++,i++){
-            auto iter = vextexMap.find(vextexs[i]);
-            if(iter == vextexMap.end()){
-                vextexIndex.push_back(vextexs[i]);
-                vextexMap.insert(make_pair(vextexs[i], vextexIndex.size()-1));
-                pointIndex = vextexIndex.size()-1;
+            auto iter = vertexMap.find(vertexs[i]);
+            if(iter == vertexMap.end()){  // can't find this vertex in map, means that this vertex has not been visited before.
+                vertexIndex.push_back(vertexs[i]);  // push this vertex into index
+                vertexMap.insert(make_pair(vertexs[i], vertexIndex.size()-1)); //update the map
+                pointIndex = vertexIndex.size()-1;
             }else{
                 pointIndex = iter->second;
             }
-            face[j] = pointIndex;
+            face[j] = pointIndex; // set the index of vertex  of the face as the index of this vertex
         }
-        facesIndex.push_back(face);
+        facesIndex.push_back(face);     //push the face into faceIndex
     }
-    cout<<vextexIndex.size()<<endl;
+    cout<<vertexIndex.size()<<endl;
     return facesIndex;
 
 }
@@ -43,7 +43,7 @@ int main() {
         cout<<"File not existed"<<endl;
         return 0;
     }
-    string outputFileName = inputFileName.substr(0,inputFileName.find_last_of('.'));
+    string outputFileName = inputFileName.substr(0,inputFileName.find_last_of('.')); // get the file name without suffix
     cout<<outputFileName<<endl;
     ofstream *outputFile = new ofstream(outputFileName+".face");
 
@@ -56,10 +56,10 @@ int main() {
     char vertexBuf[100];
     for(int i=0;i<faceNum*3;i++){
         inputFile->getline(vertexBuf,100);
-        vertexs.push_back(string(vertexBuf));
+        vertexs.push_back(string(vertexBuf));     // put the string data into a vector
     }
 
-    auto faces = vextex2IndexandFace(vertexs, vertexsIndex);
+    auto faces = vertex2IndexandFace(vertexs, vertexsIndex);
     int verticesNum = vertexsIndex.size();
     int facesNum= faces.size();
     string header = "# University of Leeds 2020-2021\n"
@@ -67,10 +67,10 @@ int main() {
                     "# runyang yu\n"
                     "# 201480588\n"
                     "#\n"
-                    "# Object Name: Cube\n"
+                    "# Object Name: "+ outputFileName+"\n"
                     "# Vertices="+to_string(verticesNum)+"Faces=" +to_string(facesNum)+" \n#";
 
-    appendHeader(outputFile, header);
+    appendHeader(outputFile, header);   //output the header into file
     for(int i=0;i<vertexsIndex.size();i++){
         *outputFile<<"Vertex "<<i<<" "<<vertexsIndex[i]<<endl;
     }

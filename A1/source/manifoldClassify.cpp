@@ -9,28 +9,36 @@
 #include "commonUtilis.h"
 using namespace  std;
 
-bool judgeSharedEdge(vector<string> &otherHalfEdges){
+
+//this function is used to judge if this mesh has wrong shared edges
+bool judgeSharedEdge(vector<string> &otherHalfEdges, ofstream *outputFile){
 
     vector<int> existedMap(otherHalfEdges.size(), 0);
     for(string halfEdge : otherHalfEdges){
         auto edgeData = strsplit(halfEdge," ");
-        if(edgeData[2]=="-1"){
-            cout<<"halfEdge "<<edgeData[1]<<" has no otherhalf. FAILED"<<endl;
+        if(edgeData[2]=="-1"){      //if one halfEdge has no otherhalfEdge, then this mesh is not manifold
+            *outputFile<<"halfEdge "<<edgeData[1]<<" has no otherhalf.\n Edge test Failed"<<endl;
             return false;
         }else{
-            if(existedMap[atoi(edgeData[2].c_str())]==1){
-                cout<<"halfedge "<<edgeData[1]<<" has more than one otherhalfEdge. FAILED"<<endl;
+            if(existedMap[atoi(edgeData[2].c_str())]==1){   //if one halfEdge has more than one edeg, than this mesh is not manifold
+                *outputFile<<"halfedge "<<edgeData[1]<<" has more than one otherhalfEdge. Edge test Failed"<<endl;
                 return false;
             }else{
                 existedMap[atoi(edgeData[2].c_str())]=1;
             }
         }
     }
-    cout<<"PASSED edge test"<<endl;
+    *outputFile<<"edge test PASSED"<<endl;
     return true;
 
 }
 
+
+//this function is used to judge if these vertexs are pinch point.
+//start from one vertex, put all faces that contain this vertex into a vector .
+//Walking along the edges from one vertex to another vertex untill current vertex equal the original start vertex, and delete each face that visited
+//Which means has find a circle of these faces.
+//if the size of  facesWitheVertex is not zero, which means that there are more than one circle about this vertex.
 bool judgeSinglePoint(string vertexStr, list<string> facesWitheVertex){
 
     auto faceData = strsplit(facesWitheVertex.front(), " ");
@@ -75,7 +83,7 @@ bool judgeSinglePoint(string vertexStr, list<string> facesWitheVertex){
                     end = (anotherPoint1==vertexStr?anotherPoint2:anotherPoint1);
                     facesWitheVertex.erase(iter);
 
-                    cout<<end<<"->";
+//                    cout<<end<<"->";
 
                     breakFlag = true;
                     break;
@@ -93,7 +101,7 @@ bool judgeSinglePoint(string vertexStr, list<string> facesWitheVertex){
 }
 
 
-bool judgePinchPoints(int vertexNum, vector<string> faces){
+bool judgePinchPoints(int vertexNum, vector<string> faces, ofstream* outputFile){
     list<string> facesWitheVertex;
     for(int i=0;i<vertexNum;i++){
         string vertexStr = to_string(i);
@@ -106,10 +114,10 @@ bool judgePinchPoints(int vertexNum, vector<string> faces){
         bool result = judgeSinglePoint(vertexStr, facesWitheVertex);
         facesWitheVertex.clear();
         if(result == false){
-            cout<<"vertex: "<<i<<" failed"<<endl;
+            *outputFile<<"vertex: "<<i<<" failed"<<endl;
             return false;
         }
-        cout<<"vertex "<<i<<" pass"<<endl;
+//        cout<<"vertex "<<i<<" pass"<<endl;
     }
 
     return true;
@@ -131,14 +139,20 @@ int calculateGenus(vector<string> &vertexs, vector<string> &halfEdges, vector<st
 
 int main(){
 
-    ifstream * inFile = new ifstream("./output.diredge");
-    ofstream * outFile = new ofstream("./manifoldClassify");
-
+    string inputFileName = _argv[1];
+    ifstream *inputFile = new ifstream(inputFileName);
+    if(!inputFile->is_open()){
+        cout<<"File not existed"<<endl;
+        return 0;
+    }
+    string outputFileName = inputFileName.substr(0,inputFileName.find_last_of('.'));
+    ofstream *outputFile = new ofstream("manifoldResult",ios::app);
+    *outputFile<<outputFileName<<endl;
     char buffer[100];
     vector<string> otherHalfEdges;
     vector<string> faces;
     vector<string> vertexs;
-    while(inFile->getline(buffer, 100)){
+    while(inputFile->getline(buffer, 100)){
         if(buffer[0] == 'O'){
             otherHalfEdges.push_back(string(buffer));
         }
@@ -150,17 +164,17 @@ int main(){
         }
     }
 
-    bool result = judgeSharedEdge(otherHalfEdges);
+    bool result = judgeSharedEdge(otherHalfEdges, outputFile);
     if(result)
-        result = judgePinchPoints(vertexs.size(), faces);
+        result = judgePinchPoints(vertexs.size(), faces, outputFile);
 
     if(result)
-        cout<<"Manifold test PASSED"<<endl;
+        *outputFile<<"Manifold test PASSED"<<endl;
     else
-        cout<<"Manifold test FAILED"<<endl;
+        *outputFile<<"Manifold test FAILED"<<endl;
 
     int genus = calculateGenus(vertexs, otherHalfEdges, faces);
-    cout<<genus<<endl;
-
+    *outputFile<<"The genus of this object is "<<genus<<endl;
+    *outputFile<<"============================================================"<<endl;
 
 }
