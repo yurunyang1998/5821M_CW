@@ -34,7 +34,7 @@ vector<array<int,3>> vertex2IndexandFace(vector<string> &vertexs,vector<string> 
 }
 
 
-int main() {
+int main(int argc, char ** _argv) {
 
 
     string inputFileName = _argv[1];
@@ -45,7 +45,7 @@ int main() {
     }
     string outputFileName = inputFileName.substr(0,inputFileName.find_last_of('.')); // get the file name without suffix
     cout<<outputFileName<<endl;
-    ofstream *outputFile = new ofstream(outputFileName+".face");
+    ofstream *outputFile = new ofstream("./output/"+outputFileName+".face");
 
 
     char faceNumBuf[5];
