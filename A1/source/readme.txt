@@ -22,6 +22,6 @@ Complexity Analysis
 
     for the question.b, there are two loop paired , so the complexity is O(n^2)
 
-    for the question.c and d, the complexity of "judgeSharedEdge" is O(n), and the complexity of "judgePinchPoints" are O(n^2),
+    for the question.c and d, the complexity of "judgeSharedEdge" is O(n), and the complexity of "judgePinchPoints" are O(n),
     the complexity of "judgeSinglePoint" is O(n^2).Because "judgePinchPoints()" invoke "judgeSinglePoint", so the complexity of
-    the "manifoldClassify.cpp" is O(n^4).
+    the "manifoldClassify.cpp" is O(n^3).
