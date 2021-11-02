@@ -35,6 +35,7 @@ vector<string> strsplit(const string& str, const string& delim) {
 
 int appendHeader(ofstream * outputFile, string header){
     *outputFile<<header<<endl;
+    return 0;
 }
 
 

@@ -17,11 +17,11 @@ bool judgeSharedEdge(vector<string> &otherHalfEdges, ofstream *outputFile){
     for(string halfEdge : otherHalfEdges){
         auto edgeData = strsplit(halfEdge," ");
         if(edgeData[2]=="-1"){      //if one halfEdge has no otherhalfEdge, then this mesh is not manifold
-            *outputFile<<"halfEdge "<<edgeData[1]<<" has no otherhalf.\n Edge test Failed"<<endl;
+            *outputFile<<"halfEdge "<<edgeData[1]<<" has no otherhalf.\nEdge test Failed"<<endl;
             return false;
         }else{
             if(existedMap[atoi(edgeData[2].c_str())]==1){   //if one halfEdge has more than one edeg, than this mesh is not manifold
-                *outputFile<<"halfedge "<<edgeData[1]<<" has more than one otherhalfEdge. Edge test Failed"<<endl;
+                *outputFile<<"halfedge "<<edgeData[1]<<" has more than one otherhalfEdge.\nEdge test Failed"<<endl;
                 return false;
             }else{
                 existedMap[atoi(edgeData[2].c_str())]=1;
@@ -137,7 +137,7 @@ int calculateGenus(vector<string> &vertexs, vector<string> &halfEdges, vector<st
 
 
 
-int main(){
+int main(int argc, char ** _argv){
 
     string inputFileName = _argv[1];
     ifstream *inputFile = new ifstream(inputFileName);
@@ -168,13 +168,15 @@ int main(){
     if(result)
         result = judgePinchPoints(vertexs.size(), faces, outputFile);
 
-    if(result)
+    if(result){
         *outputFile<<"Manifold test PASSED"<<endl;
+        int genus = calculateGenus(vertexs, otherHalfEdges, faces);
+        *outputFile<<"The genus of this object is "<<genus<<endl;
+    }
     else
         *outputFile<<"Manifold test FAILED"<<endl;
 
-    int genus = calculateGenus(vertexs, otherHalfEdges, faces);
-    *outputFile<<"The genus of this object is "<<genus<<endl;
+
     *outputFile<<"============================================================"<<endl;
 
 }

@@ -43,9 +43,12 @@ int main(int argc, char ** _argv) {
         cout<<"File not existed"<<endl;
         return 0;
     }
+
     string outputFileName = inputFileName.substr(0,inputFileName.find_last_of('.')); // get the file name without suffix
+    outputFileName = outputFileName.substr(outputFileName.find_last_of('/'));
+    outputFileName = "./output/"+outputFileName+".face";
     cout<<outputFileName<<endl;
-    ofstream *outputFile = new ofstream("./output/"+outputFileName+".face");
+    ofstream *outputFile = new ofstream(outputFileName);
 
 
     char faceNumBuf[5];

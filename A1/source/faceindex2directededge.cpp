@@ -71,7 +71,7 @@ vector<int> findOtherHalfEdge(vector<halfEdge> &halfEdgesIndex){
 
 
 
-int main(int argc, char ** argv){
+int main(int argc, char ** _argv){
 
     string inputFileName = _argv[1];
     ifstream *inputFile = new ifstream(inputFileName);
@@ -80,8 +80,11 @@ int main(int argc, char ** argv){
         return 0;
     }
     string outputFileName = inputFileName.substr(0,inputFileName.find_last_of('.'));
+    outputFileName = outputFileName.substr(outputFileName.find_last_of('/'));
     cout<<outputFileName<<endl;
-    ofstream *outputFile = new ofstream(outputFileName+".diredge");
+    string outputPath = "./output/"+outputFileName+".diredge";
+    cout<<outputPath<<endl;
+    ofstream *outputFile = new ofstream(outputPath);
 
 
 
