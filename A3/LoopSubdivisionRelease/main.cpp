@@ -57,8 +57,12 @@ int main(int argc, char **argv)
         return 0;
         } // object read failed
 
-//    subVertexs(&DirectedEdgeSurface);
+    updateHalfEdges(&DirectedEdgeSurface);
+    for(int i=0;i<1;i++){
+        subVertexs(&DirectedEdgeSurface);
+        updateNormal(&DirectedEdgeSurface);
 
+    }
 
     // dump the file to out
 //     DirectedEdgeSurface.WriteObjectStream(std::cout);

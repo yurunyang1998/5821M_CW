@@ -39,6 +39,46 @@
 // the image class for a texture
 #include "RGBAImage.h" 
 
+
+
+class halfEdge{
+private:
+    //vector<Vextex> * vextexIndex = nullptr;  // this is the pointer to the vextexIndex;
+    int startVextexIndex = -1;
+    int endVextexIndex = -1;  // the index of end vextex in vextexIndex;
+public:
+    int pairIndex = -1;
+    int next=-1;
+    halfEdge(int startVextexIndex, int endVextexIndex){
+        this->startVextexIndex = startVextexIndex;
+        this->endVextexIndex = endVextexIndex;
+    }
+    int startvextex(){
+        return startVextexIndex;
+    }
+    int endvextex(){
+        return endVextexIndex;
+    }
+    void setNext(int next_){
+        next = next_;
+    }
+
+    void setPair(int pair_){
+        this->pairIndex = pair_;
+    }
+    bool isEqual(int startIndex, int endIndex){
+        if(startIndex==this->startVextexIndex && endIndex==endVextexIndex){
+            return true;
+        }
+        return false;
+    }
+
+};
+
+
+
+
+
 class DirectedEdgeSurface
     { // class DirectedEdgeSurface
     public:
@@ -56,6 +96,8 @@ class DirectedEdgeSurface
 
 	// vector of other half edge IDs
 	std::vector<unsigned int> otherHalf;
+
+    std::vector<halfEdge> halfEdges;
 
     // centre of gravity - computed after reading
     Cartesian3 centreOfGravity;
