@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <iostream>
 #include <string>
-
+#include <set>
 using namespace  std;
 
 
@@ -51,6 +51,43 @@ int updateHalfEdges(DirectedEdgeSurface *des){
     return 0;
 
 }
+
+int updateExistedVertex(DirectedEdgeSurface *des){
+
+//    vector<Cartesian3> newVertexs;
+    vector<Cartesian3>  vertices = des->vertices;
+    for(int i=0;i<vertices.size();i++){
+
+       set<int> linkedVertexs;
+       for(auto halfEdge: des->halfEdges){
+
+           if(halfEdge.startvextex()==i)
+               linkedVertexs.insert(halfEdge.endvextex());
+           else if(halfEdge.endvextex()==i)
+               linkedVertexs.insert(halfEdge.startvextex());
+
+       }
+
+       float u =0.1;
+       int n = linkedVertexs.size();
+       Cartesian3 neighbor_position_sum(0,0,0);
+       for(int neighbor: linkedVertexs){
+
+           neighbor_position_sum.x += u* vertices[neighbor].x;
+           neighbor_position_sum.y += u* vertices[neighbor].y;
+           neighbor_position_sum.z += u* vertices[neighbor].z;
+
+       }
+
+       Cartesian3 newVertex = (1-n*u)*vertices[i] + neighbor_position_sum;
+       des->existedVertexBuffer.push_back(newVertex);
+
+    }
+    return 0;
+
+
+}
+
 
 
 
@@ -192,6 +229,11 @@ int subVertexs(DirectedEdgeSurface *des){
     
     des->vertices = vertices;
     des->faceVertices = newfaceVertices;
+
+
+
+
+
     return true;
 
 
