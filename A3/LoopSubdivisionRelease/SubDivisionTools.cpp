@@ -42,9 +42,10 @@ int updateHalfEdges(DirectedEdgeSurface *des){
     }
     for(int i=0, k=1;i<des->halfEdges.size()-1, k<des->halfEdges.size();i++,k++){
         des->halfEdges[i].setNext(i+1);
+        des->halfEdges[k].setPrevious(k-1);
     }
     des->halfEdges[des->halfEdges.size()-1].setNext(0);
-
+    des->halfEdges[0].setPrevious(des->halfEdges.size()-1);
     for(int i=0;i<des->otherHalf.size();i++){
         des->halfEdges[i].setPair(des->otherHalf[i]);
     }
@@ -96,8 +97,10 @@ int subVertexs(DirectedEdgeSurface *des){
     unordered_map<Cartesian3, int, car3cmp> subVertexs;
     vector<unsigned int> newfaceVertices;
     vector<Cartesian3>  vertices = des->vertices;
+    set<unsigned int> visitedVertices;
     vector<unsigned int>*  faceIndex = &(des->faceVertices);
     for(int i=0;i<faceIndex->size();i+=3){
+
 
 
         auto vertex0Index = faceIndex->at(i);
@@ -116,15 +119,26 @@ int subVertexs(DirectedEdgeSurface *des){
         while (!des->halfEdges[j].isEqual(vertex0Index, vertex1Index)) {
             j++;
         }
+        Cartesian3 vertex01;
         int pairIndex = des->halfEdges[j].pairIndex;
         int nextIndex = des->halfEdges[pairIndex].next;
         int vertexCIndex = des->halfEdges[nextIndex].endvextex();
-        Cartesian3 &C01 = des->vertices[vertexCIndex];
-        Cartesian3 vertex01((A01.x+B01.x)/8*3+(C01.x+D01.x)/8,
-                            (A01.y+B01.y)/8*3+(C01.y+D01.y)/8,
-                            (A01.z+B01.z)/8*3+(C01.z+D01.z)/8
-                    );
+        if(vertexCIndex == vertex0Index || vertexCIndex==vertex1Index || vertexCIndex==vertex2Index){
+            int priviousIndex = des->halfEdges[pairIndex].previous;
+            vertexCIndex = des->halfEdges[priviousIndex].startvextex();
+            Cartesian3 &C01 = des->vertices[vertexCIndex];
+            vertex01.x = (A01.x+B01.x)/8*3+(C01.x+D01.x)/8;
+            vertex01.y =  (A01.y+B01.y)/8*3+(C01.y+D01.y)/8;
+            vertex01.z = (A01.z+B01.z)/8*3+(C01.z+D01.z)/8;
 
+        }else{
+
+            Cartesian3 &C01 = des->vertices[vertexCIndex];
+            vertex01.x = (A01.x+B01.x)/8*3+(C01.x+D01.x)/8;
+            vertex01.y =  (A01.y+B01.y)/8*3+(C01.y+D01.y)/8;
+            vertex01.z = (A01.z+B01.z)/8*3+(C01.z+D01.z)/8;
+
+        }
 
 
 
@@ -140,11 +154,25 @@ int subVertexs(DirectedEdgeSurface *des){
         pairIndex = des->halfEdges[j].pairIndex;
         nextIndex = des->halfEdges[pairIndex].next;
         vertexCIndex = des->halfEdges[nextIndex].endvextex();
-        Cartesian3 &C12 = des->vertices[vertexCIndex];
-        Cartesian3 vertex12((A12.x+B12.x)/8*3+(C12.x+D12.x)/8,
-                            (A12.y+B12.y)/8*3+(C12.y+D12.y)/8,
-                            (A12.z+B12.z)/8*3+(C12.z+D12.z)/8
-                    );
+        Cartesian3 vertex12;
+        if(vertexCIndex == vertex0Index || vertexCIndex==vertex1Index || vertexCIndex==vertex2Index){
+            int priviousIndex = des->halfEdges[pairIndex].previous;
+            vertexCIndex = des->halfEdges[priviousIndex].startvextex();
+            Cartesian3 &C12 = des->vertices[vertexCIndex];
+            vertex12.x = (A12.x+B12.x)/8*3+(C12.x+D12.x)/8;
+            vertex12.y =  (A12.y+B12.y)/8*3+(C12.y+D12.y)/8;
+            vertex12.z = (A12.z+B12.z)/8*3+(C12.z+D12.z)/8;
+
+        }else{
+
+            Cartesian3 &C12 = des->vertices[vertexCIndex];
+            vertex12.x = (A12.x+B12.x)/8*3+(C12.x+D12.x)/8;
+            vertex12.y =  (A12.y+B12.y)/8*3+(C12.y+D12.y)/8;
+            vertex12.z = (A12.z+B12.z)/8*3+(C12.z+D12.z)/8;
+
+        }
+
+
 
 
 
@@ -158,22 +186,23 @@ int subVertexs(DirectedEdgeSurface *des){
         }
         pairIndex = des->halfEdges[j].pairIndex;
         nextIndex = des->halfEdges[pairIndex].next;
-        vertexCIndex = des->halfEdges[nextIndex].endvextex();
-        Cartesian3 &C20 = des->vertices[vertexCIndex];
-        Cartesian3 vertex20((A20.x+B20.x)/8*3+(C20.x+D20.x)/8,
-                            (A20.y+B20.y)/8*3+(C20.y+D20.y)/8,
-                            (A20.z+B20.z)/8*3+(C20.z+D20.z)/8
-                    );
+        Cartesian3 vertex20;
+        if(vertexCIndex == vertex0Index || vertexCIndex==vertex1Index || vertexCIndex==vertex2Index){
+            int priviousIndex = des->halfEdges[pairIndex].previous;
+            vertexCIndex = des->halfEdges[priviousIndex].startvextex();
+            Cartesian3 &C20 = des->vertices[vertexCIndex];
+            vertex20.x = (A20.x+B20.x)/8*3+(C20.x+D20.x)/8;
+            vertex20.y =  (A20.y+B20.y)/8*3+(C20.y+D20.y)/8;
+            vertex20.z = (A20.z+B20.z)/8*3+(C20.z+D20.z)/8;
 
+        }else{
 
+            Cartesian3 &C20 = des->vertices[vertexCIndex];
+            vertex20.x = (A20.x+B20.x)/8*3+(C20.x+D20.x)/8;
+            vertex20.y =  (A20.y+B20.y)/8*3+(C20.y+D20.y)/8;
+            vertex20.z = (A20.z+B20.z)/8*3+(C20.z+D20.z)/8;
 
-
-
-
-
-
-
-
+        }
 
 
 
