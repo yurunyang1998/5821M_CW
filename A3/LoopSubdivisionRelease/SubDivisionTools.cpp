@@ -109,11 +109,6 @@ int subVertexs(DirectedEdgeSurface *des){
         auto vertex2 = vertices[faceIndex->at(i+2)];
 
 
-//        Cartesian3 vertex01((vertex0.x+vertex1.x)/2, (vertex0.y+vertex1.y)/2, (vertex0.z+vertex1.z)/2);
-//        Cartesian3 vertex12((vertex1.x+vertex2.x)/2, (vertex1.y+vertex2.y)/2, (vertex1.z+vertex2.z)/2);
-//        Cartesian3 vertex20((vertex2.x+vertex0.x)/2, (vertex2.y+vertex0.y)/2, (vertex2.z+vertex0.z)/2);
-
-
         Cartesian3 &A01 = vertex0;
         Cartesian3 &B01 = vertex1;
         Cartesian3 &D01 = vertex2;
@@ -128,6 +123,27 @@ int subVertexs(DirectedEdgeSurface *des){
         Cartesian3 vertex01((A01.x+B01.x)/8*3+(C01.x+D01.x)/8,
                             (A01.y+B01.y)/8*3+(C01.y+D01.y)/8,
                             (A01.z+B01.z)/8*3+(C01.z+D01.z)/8
+                    );
+
+
+
+
+
+
+        Cartesian3 &A12 = vertex1;
+        Cartesian3 &B12 = vertex2;
+        Cartesian3 &D12 = vertex0;
+        j=0;
+        while (!des->halfEdges[j].isEqual(vertex1Index, vertex2Index)) {
+            j++;
+        }
+        pairIndex = des->halfEdges[j].pairIndex;
+        nextIndex = des->halfEdges[pairIndex].next;
+        vertexCIndex = des->halfEdges[nextIndex].endvextex();
+        Cartesian3 &C12 = des->vertices[vertexCIndex];
+        Cartesian3 vertex12((A12.x+B12.x)/8*3+(C12.x+D12.x)/8,
+                            (A12.y+B12.y)/8*3+(C12.y+D12.y)/8,
+                            (A12.z+B12.z)/8*3+(C12.z+D12.z)/8
                     );
 
 
@@ -152,27 +168,6 @@ int subVertexs(DirectedEdgeSurface *des){
 
 
 
-        Cartesian3 &A12 = vertex1;
-        Cartesian3 &B12 = vertex2;
-        Cartesian3 &D12 = vertex0;
-        j=0;
-        while (!des->halfEdges[j].isEqual(vertex1Index, vertex2Index)) {
-            j++;
-        }
-        pairIndex = des->halfEdges[j].pairIndex;
-        nextIndex = des->halfEdges[pairIndex].next;
-        vertexCIndex = des->halfEdges[nextIndex].endvextex();
-        Cartesian3 &C12 = des->vertices[vertexCIndex];
-        Cartesian3 vertex12((A12.x+B12.x)/8*3+(C12.x+D12.x)/8,
-                            (A12.y+B12.y)/8*3+(C12.y+D12.y)/8,
-                            (A12.z+B12.z)/8*3+(C12.z+D12.z)/8
-                    );
-
-
-
-
-
-
 
 
 
@@ -189,13 +184,11 @@ int subVertexs(DirectedEdgeSurface *des){
             subVertexs.insert(make_pair(vertex01,vertices.size()-1));
         }
 
-        auto iter= subVertexs.find(vertex12);
-        if(iter==subVertexs.end()){
+        if( subVertexs.find(vertex12)==subVertexs.end()){
             vertices.push_back(vertex12);
             subVertexs.insert(make_pair(vertex12,vertices.size()-1));
         }
-        iter= subVertexs.find(vertex20);
-        if(iter==subVertexs.end()){
+        if(subVertexs.find(vertex20)==subVertexs.end()){
             vertices.push_back(vertex20);
             subVertexs.insert(make_pair(vertex20,vertices.size()-1));
         }

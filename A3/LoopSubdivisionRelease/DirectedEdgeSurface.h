@@ -98,6 +98,7 @@ class DirectedEdgeSurface
 	std::vector<unsigned int> otherHalf;
 
     std::vector<halfEdge> halfEdges;
+    std::vector<Cartesian3> existedVertexBuffer;
 
     // centre of gravity - computed after reading
     Cartesian3 centreOfGravity;
