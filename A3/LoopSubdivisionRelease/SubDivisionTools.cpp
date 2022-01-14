@@ -1,7 +1,7 @@
 #include "Cartesian3.h"
 #include "RGBAImage.h"
 #include "DirectedEdgeSurface.h"
-#include "subDivisionTools.h"
+#include "SubDivisionTools.h"
 #include <vector>
 #include <unordered_map>
 #include <iostream>
