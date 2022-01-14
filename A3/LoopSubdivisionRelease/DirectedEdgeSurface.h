@@ -49,6 +49,8 @@ private:
 public:
     int pairIndex = -1;
     int next=-1;
+    int previous=-1;
+    int face=-1;
     halfEdge(int startVextexIndex, int endVextexIndex){
         this->startVextexIndex = startVextexIndex;
         this->endVextexIndex = endVextexIndex;
@@ -62,10 +64,17 @@ public:
     void setNext(int next_){
         next = next_;
     }
+    void setPrevious(int pri){
+        previous = pri;
+    }
 
     void setPair(int pair_){
         this->pairIndex = pair_;
     }
+    void setFace(int faceIndex){
+        this->face = faceIndex;
+    }
+
     bool isEqual(int startIndex, int endIndex){
         if(startIndex==this->startVextexIndex && endIndex==endVextexIndex){
             return true;

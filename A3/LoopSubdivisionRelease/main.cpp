@@ -57,10 +57,15 @@ int main(int argc, char **argv)
         return 0;
         } // object read failed
 
-    updateHalfEdges(&DirectedEdgeSurface);
-    for(int i=0;i<1;i++){
+
+    for(int i=0;i<3;i++){
+        updateHalfEdges(&DirectedEdgeSurface);
+        updateExistedVertex(&DirectedEdgeSurface);
         subVertexs(&DirectedEdgeSurface);
         updateNormal(&DirectedEdgeSurface);
+        for(int i=0;i<DirectedEdgeSurface.existedVertexBuffer.size();i++){
+            DirectedEdgeSurface.vertices[i] = DirectedEdgeSurface.existedVertexBuffer[i];
+        }
 
     }
 
