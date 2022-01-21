@@ -28,7 +28,7 @@
 #include "RenderParameters.h"
 #include "RenderController.h"
 #include "SubDivisionTools.h"
-
+#include <string>
 // main routine
 int main(int argc, char **argv)
     { // main()
@@ -70,8 +70,16 @@ int main(int argc, char **argv)
     }
 
     // dump the file to out
-//     DirectedEdgeSurface.WriteObjectStream(std::cout);
+     std::string inputFileName = std::string(argv[1]);
+     std::string outputFileName = inputFileName.substr(0,inputFileName.find_last_of('.'));
+//     outputFileName = outputFileName.substr(outputFileName.find_last_of('\\'));
+//     cout<<outputFileName<<endl;
+     std::string outputPath = outputFileName+"_new.diredgenormal";
+     std::cout<<outputPath<<std::endl;
 
+     std::ofstream outpufFile(outputPath);
+     DirectedEdgeSurface.WriteObjectStream(outpufFile);
+     outpufFile.close();
     // create some default render parameters
     RenderParameters renderParameters;
 
